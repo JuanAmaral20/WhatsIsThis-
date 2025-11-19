@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
-import { CameraView, CameraType } from "expo-camera";
+import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import React, { useRef, useState } from "react";
 import { Photo } from "../types";
 
@@ -12,18 +12,69 @@ interface CameraScreenProps {
 const CameraScreen: React.FC<CameraScreenProps> = ({ onCapture, onCancel }) => {
   const cameraRef = useRef<CameraView>(null);
   const [type, setType] = useState<CameraType>("back");
+  const [permission, requestPermission] = useCameraPermissions();
+
+  if (!permission) {
+    return <View />;
+  }
+
+  if (!permission.granted) {
+    requestPermission();
+  }
+
+  const handleCapture = async () => {
+    try {
+      if (!cameraRef.current) return;
+
+      const photo = await cameraRef.current.takePictureAsync({
+        base64: true,
+        quality: 0.8,
+      });
+
+      const response = await fetch("https://sua-api.com/classificar", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ image: photo.base64 }),
+      });
+
+      const result = await response.json();
+
+      const formattedPhoto: Photo = {
+        uri: photo.uri,
+        base64: photo.base64 ?? "",
+        width: photo.width,
+        height: photo.height,
+        category: result.category,
+        description: result.description,
+        object: result.object,
+        price: result.price,
+      };
+
+      onCapture(formattedPhoto);
+    } catch (error) {
+      console.log("Erro ao capturar foto:", error);
+    }
+  };
 
   return (
     <View style={styles.container}>
-        <Feather  style={styles.iconCamera}  name="camera" size={50} color="#ffffff" />
-      <CameraView style={styles.cameraView} ref={cameraRef} facing={type}>
-      </CameraView>
+      <Feather
+        style={styles.iconCamera}
+        name="camera"
+        size={50}
+        color="#ffffff"
+      />
+      <CameraView
+        style={styles.cameraView}
+        ref={cameraRef}
+        facing={type}
+      ></CameraView>
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.cancelButton} onPress={onCancel}>
           <Text style={styles.buttonTextCancel}>Cancelar</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.captureButton} >
+        <TouchableOpacity style={styles.captureButton} onPress={handleCapture}>
           <Feather name="camera" size={20} color="#ffffff" />
           <Text style={styles.buttonTextCapture}>Capturar</Text>
         </TouchableOpacity>
@@ -87,7 +138,6 @@ const styles = StyleSheet.create({
     height: 60,
     borderWidth: 2,
     borderRadius: 10,
-
   },
 });
 

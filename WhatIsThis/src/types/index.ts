@@ -3,4 +3,8 @@ export interface Photo {
   base64: string;
   width: number;
   height: number;
+  category?: string;
+  description?: string;
+  object?: string;
+  price?: string;
 }

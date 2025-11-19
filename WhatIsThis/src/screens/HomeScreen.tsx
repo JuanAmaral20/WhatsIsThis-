@@ -5,7 +5,6 @@ import Feather from "@expo/vector-icons/Feather";
 import { TouchableOpacity } from "react-native";
 
 interface HomeScreenProps {
-  // onStartCamera é uma função que não recebe argumentos e retorna void (nada)
   onStartCamera: () => void; 
 }
 
