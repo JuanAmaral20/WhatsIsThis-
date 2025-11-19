@@ -28,13 +28,15 @@ const CameraScreen: React.FC<CameraScreenProps> = ({ onCapture, onCancel }) => {
 
       const photo = await cameraRef.current.takePictureAsync({
         base64: true,
-        quality: 0.8,
+        quality: 0.4,
       });
+      console.log("Foto capturada, enviando para backend...");
+      console.log("Base64 existe? ", photo.base64?.substring(0, 30));
 
-      const response = await fetch("https://sua-api.com/classificar", {
+      const response = await fetch("http://192.168.1.8:3000/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ image: photo.base64 }),
+        body: JSON.stringify({ base64Image: photo.base64 }),
       });
 
       const result = await response.json();
@@ -49,6 +51,8 @@ const CameraScreen: React.FC<CameraScreenProps> = ({ onCapture, onCancel }) => {
         object: result.object,
         price: result.price,
       };
+
+      console.log("Resposta recebida do backend:", result);
 
       onCapture(formattedPhoto);
     } catch (error) {
