@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Feather from "@expo/vector-icons/Feather";
 import { TouchableOpacity } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 
 interface HomeScreenProps {
   onStartCamera: () => void; 
@@ -10,7 +11,10 @@ interface HomeScreenProps {
 
 export default function HomeScreen({ onStartCamera }: HomeScreenProps) {
   return (
-    <View style={styles.container}>
+    <LinearGradient colors={["hsl(240, 99%, 50%)", "hsl(190, 100%, 50%)"]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.container}>
       <View style={styles.cameraIcon}>
         <Feather name="camera" size={50} color="white" />
       </View>
@@ -44,19 +48,18 @@ export default function HomeScreen({ onStartCamera }: HomeScreenProps) {
         style={styles.customButton}
         onPress={onStartCamera}
       >
-        <Feather name="camera" size={20} color="#7c1ae4e5" />
+        <Feather name="camera" size={20} color="hsl(240, 99%, 50%)" />
         <Text style={styles.buttonText}>Iniciar Identificação de Objeto</Text>
       </TouchableOpacity>
       <Text style={styles.instructionText}>Toque no botão acima para começar</Text>
       <StatusBar style="auto" />
-    </View>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#7c1ae4e5",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -68,7 +71,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 30,
     padding: 50,
-    backgroundColor: "#6c31b8c2",
   },
   tittle: {
     fontSize: 50,
@@ -92,11 +94,10 @@ const styles = StyleSheet.create({
     borderColor: "#fff",
     borderWidth: 1,
     borderRadius: 10,
-    backgroundColor: "#6c31b8c2",
   },
   iconContainer: {
     marginRight: 10,
-    backgroundColor: "#7c1ae4e5",
+    backgroundColor: "#0101ff3f",
     padding: 10,
     borderRadius: 10,
   },
@@ -122,7 +123,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   buttonText: {
-    color: "#7c1ae4e5",
+    color: "hsl(240, 99%, 50%)",
     fontWeight: "bold",
     fontSize: 16,
   },

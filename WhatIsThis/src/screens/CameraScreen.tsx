@@ -1,8 +1,10 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Alert } from "react-native";
 import Feather from "@expo/vector-icons/Feather";
 import { CameraView, CameraType, useCameraPermissions } from "expo-camera";
 import React, { useRef, useState } from "react";
 import { Photo } from "../types";
+import { identifyObject } from "../services/IdentificationService";
+import { LinearGradient } from "expo-linear-gradient";
 
 interface CameraScreenProps {
   onCapture: (photo: Photo) => void;
@@ -13,6 +15,7 @@ const CameraScreen: React.FC<CameraScreenProps> = ({ onCapture, onCancel }) => {
   const cameraRef = useRef<CameraView>(null);
   const [type, setType] = useState<CameraType>("back");
   const [permission, requestPermission] = useCameraPermissions();
+  const [isProcessing, setIsProcessing] = useState(false);
 
   if (!permission) {
     return <View />;
@@ -33,35 +36,50 @@ const CameraScreen: React.FC<CameraScreenProps> = ({ onCapture, onCancel }) => {
       console.log("Foto capturada, enviando para backend...");
       console.log("Base64 existe? ", photo.base64?.substring(0, 30));
 
-      const response = await fetch("http://192.168.1.8:3000/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ base64Image: photo.base64 }),
-      });
-
-      const result = await response.json();
-
-      const formattedPhoto: Photo = {
+      const basePhoto: Photo = {
         uri: photo.uri,
         base64: photo.base64 ?? "",
         width: photo.width,
         height: photo.height,
-        category: result.category,
-        description: result.description,
-        object: result.object,
-        price: result.price,
+        category: undefined,
+        description: undefined,
+        object: undefined,
+        price: undefined,
       };
 
-      console.log("Resposta recebida do backend:", result);
+      const identificationResult = await identifyObject(
+        basePhoto,
+        "Identifique o objeto na imagem e forneça categoria, descrição, objeto e preço médio."
+      );
 
-      onCapture(formattedPhoto);
+      const finalPhoto: Photo = {
+        ...basePhoto,
+        category: identificationResult.categoria,
+        object: identificationResult.objeto,
+        description: identificationResult.funcao, 
+        price: identificationResult.precoMedio, 
+      };
+
+      console.log("Identificação completa. Objeto:", finalPhoto.object);
+
+      onCapture(finalPhoto);
     } catch (error) {
-      console.log("Erro ao capturar foto:", error);
+      Alert.alert(
+        "Erro",
+        "Não foi possível identificar o objeto. Verifique a conexão e o backend."
+      );
+    } finally {
+      setIsProcessing(false); 
     }
   };
 
   return (
-    <View style={styles.container}>
+    <LinearGradient
+      colors={["hsl(240, 99%, 50%)", "hsl(190, 100%, 50%)"]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.container}
+    >
       <Feather
         style={styles.iconCamera}
         name="camera"
@@ -78,12 +96,21 @@ const CameraScreen: React.FC<CameraScreenProps> = ({ onCapture, onCancel }) => {
           <Text style={styles.buttonTextCancel}>Cancelar</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.captureButton} onPress={handleCapture}>
-          <Feather name="camera" size={20} color="#ffffff" />
-          <Text style={styles.buttonTextCapture}>Capturar</Text>
-        </TouchableOpacity>
+        <View style={styles.captureButton}>
+          <TouchableOpacity onPress={handleCapture} activeOpacity={1}>
+            <LinearGradient
+              colors={["hsl(240, 99%, 50%)", "hsl(190, 100%, 50%)"]}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+              style={styles.buttonGradient}
+            >
+              <Feather name="camera" size={20} color="#ffffff" />
+              <Text style={styles.buttonTextCapture}>Capturar</Text>
+            </LinearGradient>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
+    </LinearGradient>
   );
 };
 
@@ -117,13 +144,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 10,
     backgroundColor: "#fff",
-    padding: 10,
+    padding: 10, 
     width: 150,
-    borderWidth: 2,
+    borderWidth: 1,
+    borderColor: "hsl(240, 99%, 50%)",
     borderRadius: 10,
   },
   buttonTextCancel: {
-    color: "#7c1ae4e5",
+    color: "hsl(240, 99%, 50%)",
     fontWeight: "bold",
   },
   buttonTextCapture: {
@@ -131,16 +159,20 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   captureButton: {
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#fff",
+    overflow: "hidden",
+  },
+  buttonGradient: {
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
     gap: 10,
-    backgroundColor: "#6c31b8c2",
     padding: 10,
     width: 150,
     justifyContent: "center",
     height: 60,
-    borderWidth: 2,
     borderRadius: 10,
   },
 });

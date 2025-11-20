@@ -34,6 +34,7 @@ Regras:
 - Não descreva o cenário ou a foto, apenas o objeto.
 - Não invente detalhes não visíveis.
 - Se vários objetos aparecerem, descreva o mais relevante.
+- O retorno de Preço Médio sempre deve ser em Reais (R$). Ex: R$50 - R$100 (Nao use strings, frases, palavras ou outras moedas).
 - O retorno deve ser estruturado exatamente assim:
 
 Categoria: …
