@@ -138,6 +138,9 @@ Bash
 
 npx expo start
 Use o aplicativo Expo Go no seu dispositivo/emulador para escanear o QR Code e rodar o projeto.
+<img width="739" height="1600" alt="WhatsApp-Image-2025-11-20-at-10 11 30_1" src="https://github.com/user-attachments/assets/df380dda-dcfa-4026-8106-385a337e8957" />
 
 ![Tela Home da aplicação](WhatIsThis/assets/images/home.png)
+
+
 
