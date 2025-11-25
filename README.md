@@ -141,7 +141,7 @@ Use o aplicativo Expo Go no seu dispositivo/emulador para escanear o QR Code e r
 
 ## 📸 Screenshot da Aplicação
 
-![Tela principal do WhatIsThis](./WhatIsThis/assets/image1.jpeg)
+![Tela principal do WhatIsThis](./WhatsIsThis/assets/image1.jpeg)
 
 ![Tela de captura do WhatIsThis](./WhatIsThis/assets/image2.jpeg)
 
