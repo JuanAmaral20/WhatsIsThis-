@@ -138,3 +138,6 @@ Bash
 
 npx expo start
 Use o aplicativo Expo Go no seu dispositivo/emulador para escanear o QR Code e rodar o projeto.
+
+![Tela Home da aplicação](WhatIsThis/assets/images/home.png)
+
