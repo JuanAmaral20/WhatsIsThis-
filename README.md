@@ -1,4 +1,4 @@
-Imagens do Projeto no meu Linkedin: https://www.linkedin.com/posts/juan-amaral20_projeto-finalizado-recentemente-estava-activity-7397287841950588928-HX2_?utm_source=share&utm_medium=member_desktop&rcm=ACoAADgrcyQB36YJO3I6WJoR0bi8lEYnwAgrjpk
+# 📸 Imagens do Projeto no meu Linkedin: https://www.linkedin.com/posts/juan-amaral20_projeto-finalizado-recentemente-estava-activity-7397287841950588928-HX2_?utm_source=share&utm_medium=member_desktop&rcm=ACoAADgrcyQB36YJO3I6WJoR0bi8lEYnwAgrjpk
 
 # 📸 WhatIsThis: Identificação de Objetos por IA
 
