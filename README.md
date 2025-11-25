@@ -1,3 +1,5 @@
+Imagens do Projeto no meu Linkedin: https://www.linkedin.com/posts/juan-amaral20_projeto-finalizado-recentemente-estava-activity-7397287841950588928-HX2_?utm_source=share&utm_medium=member_desktop&rcm=ACoAADgrcyQB36YJO3I6WJoR0bi8lEYnwAgrjpk
+
 # 📸 WhatIsThis: Identificação de Objetos por IA
 
 O `WhatIsThis` é um projeto de aplicação mobile (iOS e Android) construído com **React Native (Expo)** que permite aos usuários tirar uma foto de qualquer objeto e receber instantaneamente uma análise detalhada feita por inteligência artificial.
